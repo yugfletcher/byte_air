@@ -7,7 +7,7 @@ defmodule ByteAir.Application do
 
   @impl true
   def start(_type, _args) do
-    # ByteAir.Release.migrate()
+    ByteAir.Release.migrate()
 
     children = [
       # Start the Telemetry supervisor

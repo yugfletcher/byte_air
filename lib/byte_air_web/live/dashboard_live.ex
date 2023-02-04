@@ -12,7 +12,7 @@ defmodule ByteAirWeb.DashboardLive do
     {:ok,
      assign(socket,
        bme688readings: SensorBoundary.list_bme688readings(),
-       pms5003readings: SensorBoundary.list_pms5003readings(),
+       pms5003readings: SensorBoundary.list_pms5003readings()
      )}
   end
 
@@ -23,7 +23,14 @@ defmodule ByteAirWeb.DashboardLive do
         Byte Air !
       </h1>
       <div class="gap-4 md:flex flex-col lg:grid grid-cols-2 grid-rows-2 px-4">
-        <%= make_bme688_line_chart(@bme688readings) %>
+        <%= bme688_temp_humidity(@bme688readings) %>
+        <%= bme688_pressure(@bme688readings) %>
+        <div>
+          <%= bme688_gas(@bme688readings) %>
+          <h1>
+            The stat above is a reading for everything tiny in the air, from unhealthy volitile organic compounds (VOCs) to innocuous carbon monoxide & hydrogen in parts per billion.
+          </h1>
+        </div>
         <%= make_pms5003_line_chart(@pms5003readings) %>
       </div>
     </div>
@@ -103,6 +110,70 @@ defmodule ByteAirWeb.DashboardLive do
       400,
       mapping: %{x_col: "Time", y_cols: ["Temp", "Pressure", "Humidity", "Gas"]},
       title: "BME688 Readings",
+      x_label: "Time",
+      legend_setting: :legend_right
+    )
+    |> Contex.Plot.to_svg()
+  end
+
+  def bme688_temp_humidity(bme688_readings) do
+    bme688_readings
+    |> Enum.map(fn %{
+                     inserted_at: timestamp,
+                     temperature: temperature,
+                     humidity: humidity
+                   } ->
+      [timestamp, temperature, humidity]
+    end)
+    |> Contex.Dataset.new(["Time", "Temp", "Humidity"])
+    |> Contex.Plot.new(
+      Contex.LinePlot,
+      800,
+      400,
+      mapping: %{x_col: "Time", y_cols: ["Temp", "Humidity"]},
+      title: "BME688 Temperature & Humidity Readings",
+      x_label: "Time",
+      legend_setting: :legend_right
+    )
+    |> Contex.Plot.to_svg()
+  end
+
+  def bme688_pressure(bme688_readings) do
+    bme688_readings
+    |> Enum.map(fn %{
+                     inserted_at: timestamp,
+                     pressure: pressure
+                   } ->
+      [timestamp, pressure]
+    end)
+    |> Contex.Dataset.new(["Time", "Pressure"])
+    |> Contex.Plot.new(
+      Contex.LinePlot,
+      800,
+      400,
+      mapping: %{x_col: "Time", y_cols: ["Pressure"]},
+      title: "BME688 Pressure Readings",
+      x_label: "Time",
+      legend_setting: :legend_right
+    )
+    |> Contex.Plot.to_svg()
+  end
+
+  def bme688_gas(bme688_readings) do
+    bme688_readings
+    |> Enum.map(fn %{
+                     inserted_at: timestamp,
+                     gas: gas
+                   } ->
+      [timestamp, gas]
+    end)
+    |> Contex.Dataset.new(["Time", "Gas"])
+    |> Contex.Plot.new(
+      Contex.LinePlot,
+      800,
+      400,
+      mapping: %{x_col: "Time", y_cols: ["Gas"]},
+      title: "BME688 Gas Readings",
       x_label: "Time",
       legend_setting: :legend_right
     )

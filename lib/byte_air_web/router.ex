@@ -24,9 +24,12 @@ defmodule ByteAirWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", ByteAirWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", ByteAirWeb do
+    pipe_through :api
+
+    resources "/bme688readings", BME688ReadingController, except: [:new, :edit]
+    resources "/pms5003readings", PMS5003ReadingController, except: [:new, :edit]
+  end
 
   # Enable Swoosh mailbox preview in development
   if Application.compile_env(:byte_air, :dev_routes) do

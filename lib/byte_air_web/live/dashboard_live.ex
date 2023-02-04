@@ -33,9 +33,9 @@ defmodule ByteAirWeb.DashboardLive do
 
     # big_data = [data, more_data]
 
-    omega_data = [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]
+    _omega_data = [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]
 
-    plot_options = %{
+    _plot_options = %{
       top_margin: 5,
       right_margin: 5,
       bottom_margin: 5,
@@ -44,7 +44,6 @@ defmodule ByteAirWeb.DashboardLive do
       show_y_axis: true
     }
 
-    output =
       data
       |> Contex.Dataset.new(["Timey", "Temp?", "E-Level?"])
       |> Contex.Plot.new(Contex.LinePlot, 800, 400,
@@ -55,7 +54,5 @@ defmodule ByteAirWeb.DashboardLive do
         legend_setting: :legend_right
       )
       |> Contex.Plot.to_svg()
-
-    output
   end
 end

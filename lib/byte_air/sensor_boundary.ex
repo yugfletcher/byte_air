@@ -53,6 +53,7 @@ defmodule ByteAir.SensorBoundary do
     %BME688Reading{}
     |> BME688Reading.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:update_bme688)
   end
 
   @doc """
@@ -149,6 +150,7 @@ defmodule ByteAir.SensorBoundary do
     %PMS5003Reading{}
     |> PMS5003Reading.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:update_pms5003)
   end
 
   @doc """
@@ -196,5 +198,17 @@ defmodule ByteAir.SensorBoundary do
   """
   def change_pms5003_reading(%PMS5003Reading{} = pms5003_reading, attrs \\ %{}) do
     PMS5003Reading.changeset(pms5003_reading, attrs)
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+
+  defp broadcast({:ok, pms5003_reading}, :update_pms5003) do
+    Phoenix.PubSub.broadcast(ByteAir.PubSub, "pms5003_topic", {:update_pms5003, pms5003_reading})
+    {:ok, pms5003_reading}
+  end
+
+  defp broadcast({:ok, bme688_reading}, :update_bme688) do
+    Phoenix.PubSub.broadcast(ByteAir.PubSub, "bme688_topic", {:update_bme688, bme688_reading})
+    {:ok, bme688_reading}
   end
 end

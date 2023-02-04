@@ -12,7 +12,7 @@ defmodule ByteAirWeb.DashboardLive do
     {:ok,
      assign(socket,
        bme688readings: SensorBoundary.list_bme688readings(),
-       pms5003readings: SensorBoundary.list_pms5003readings()
+       pms5003readings: SensorBoundary.list_pms5003readings(),
      )}
   end
 
@@ -22,11 +22,9 @@ defmodule ByteAirWeb.DashboardLive do
       <h1 class="text-center italic font-bold text-white text-4xl p-8 ">
         Byte Air !
       </h1>
-      <div class="gap-4 md:flex flex-col lg:grid grid-cols-3 grid-rows-2 px-4">
-        <%= make_line_chart() %>
-        <%= make_line_chart() %>
-        <%= make_line_chart() %>
-        <%= make_line_chart() %>
+      <div class="gap-4 md:flex flex-col lg:grid grid-cols-2 grid-rows-2 px-4">
+        <%= make_bme688_line_chart(@bme688readings) %>
+        <%= make_pms5003_line_chart(@pms5003readings) %>
       </div>
     </div>
     <div class="bg-opal flex flex-col">
@@ -47,6 +45,14 @@ defmodule ByteAirWeb.DashboardLive do
       </div>
     </div>
     """
+  end
+
+  def handle_info({:update_bme688, _bme688_reading}, socket) do
+    {:noreply, assign(socket, bme688readings: SensorBoundary.list_bme688readings())}
+  end
+
+  def handle_info({:update_pms5003, _pms5003_reading}, socket) do
+    {:noreply, assign(socket, pms5003readings: SensorBoundary.list_pms5003readings())}
   end
 
   def make_line_chart() do
@@ -74,6 +80,53 @@ defmodule ByteAirWeb.DashboardLive do
       title: "poggers",
       x_label: "Timey",
       mapping: %{x_col: "Timey", y_cols: ["Temp?", "E-Level?"]},
+      legend_setting: :legend_right
+    )
+    |> Contex.Plot.to_svg()
+  end
+
+  def make_bme688_line_chart(bme688_readings) do
+    bme688_readings
+    |> Enum.map(fn %{
+                     inserted_at: timestamp,
+                     temperature: temperature,
+                     pressure: pressure,
+                     humidity: humidity,
+                     gas: gas
+                   } ->
+      [timestamp, temperature, pressure, humidity, gas]
+    end)
+    |> Contex.Dataset.new(["Time", "Temp", "Pressure", "Humidity", "Gas"])
+    |> Contex.Plot.new(
+      Contex.LinePlot,
+      800,
+      400,
+      mapping: %{x_col: "Time", y_cols: ["Temp", "Pressure", "Humidity", "Gas"]},
+      title: "BME688 Readings",
+      x_label: "Time",
+      legend_setting: :legend_right
+    )
+    |> Contex.Plot.to_svg()
+  end
+
+  def make_pms5003_line_chart(pms5003_readings) do
+    pms5003_readings
+    |> Enum.map(fn %{
+                     inserted_at: timestamp,
+                     pm1_0: pm1_0,
+                     pm2_5: pm2_5,
+                     pm10: pm10
+                   } ->
+      [timestamp, pm1_0, pm2_5, pm10]
+    end)
+    |> Contex.Dataset.new(["Time", "PM1.0", "PM2.5", "PM10"])
+    |> Contex.Plot.new(
+      Contex.LinePlot,
+      800,
+      400,
+      mapping: %{x_col: "Time", y_cols: ["PM1.0", "PM2.5", "PM10"]},
+      title: "PMS5003 Particulate Matter Readings",
+      x_label: "Time",
       legend_setting: :legend_right
     )
     |> Contex.Plot.to_svg()

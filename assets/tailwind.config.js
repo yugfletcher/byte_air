@@ -13,7 +13,12 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
-      }
+        "cool-white": "#FFFFFF",
+        "black-olive": "#3B413C",
+        "opal": "#9DB5B2",
+        "light-cyan": "#DAF0EE",
+        "middle-blue-green": "#94D1BE",
+      },
     },
   },
   plugins: [

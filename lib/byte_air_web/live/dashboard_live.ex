@@ -29,9 +29,21 @@ defmodule ByteAirWeb.DashboardLive do
         <%= make_line_chart() %>
       </div>
     </div>
-    <div>
-      <div>
-        <%= make_line_chart() %>
+    <div class="bg-opal flex flex-col">
+      <div class="gap-4 md:flex flex-col lg:grid grid-cols-2 grid-rows-1 px-4">
+        <.table id="bme688_table" rows={@bme688readings}>
+          <:col :let={bme688_elem} label="name"><%= bme688_elem.name %></:col>
+          <:col :let={bme688_elem} label="temperature"><%= bme688_elem.temperature %></:col>
+          <:col :let={bme688_elem} label="pressure"><%= bme688_elem.pressure %></:col>
+          <:col :let={bme688_elem} label="humidity"><%= bme688_elem.humidity %></:col>
+          <:col :let={bme688_elem} label="gas"><%= bme688_elem.gas %></:col>
+        </.table>
+        <.table id="pms5003_table" rows={@pms5003readings}>
+          <:col :let={pms5003_elem} label="name"><%= pms5003_elem.name %></:col>
+          <:col :let={pms5003_elem} label="pm1_0"><%= pms5003_elem.pm1_0 %></:col>
+          <:col :let={pms5003_elem} label="pm2_5"><%= pms5003_elem.pm2_5 %></:col>
+          <:col :let={pms5003_elem} label="pm10"><%= pms5003_elem.pm10 %></:col>
+        </.table>
       </div>
     </div>
     """

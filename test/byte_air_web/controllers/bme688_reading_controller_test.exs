@@ -58,7 +58,10 @@ defmodule ByteAirWeb.BME688ReadingControllerTest do
   describe "update bme688_reading" do
     setup [:create_bme688_reading]
 
-    test "renders bme688_reading when data is valid", %{conn: conn, bme688_reading: %BME688Reading{id: id} = bme688_reading} do
+    test "renders bme688_reading when data is valid", %{
+      conn: conn,
+      bme688_reading: %BME688Reading{id: id} = bme688_reading
+    } do
       conn = put(conn, ~p"/api/bme688readings/#{bme688_reading}", bme688_reading: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 

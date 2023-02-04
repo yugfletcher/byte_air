@@ -55,8 +55,13 @@ defmodule ByteAirWeb.PMS5003ReadingControllerTest do
   describe "update pms5003_reading" do
     setup [:create_pms5003_reading]
 
-    test "renders pms5003_reading when data is valid", %{conn: conn, pms5003_reading: %PMS5003Reading{id: id} = pms5003_reading} do
-      conn = put(conn, ~p"/api/pms5003readings/#{pms5003_reading}", pms5003_reading: @update_attrs)
+    test "renders pms5003_reading when data is valid", %{
+      conn: conn,
+      pms5003_reading: %PMS5003Reading{id: id} = pms5003_reading
+    } do
+      conn =
+        put(conn, ~p"/api/pms5003readings/#{pms5003_reading}", pms5003_reading: @update_attrs)
+
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, ~p"/api/pms5003readings/#{id}")
@@ -71,7 +76,9 @@ defmodule ByteAirWeb.PMS5003ReadingControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, pms5003_reading: pms5003_reading} do
-      conn = put(conn, ~p"/api/pms5003readings/#{pms5003_reading}", pms5003_reading: @invalid_attrs)
+      conn =
+        put(conn, ~p"/api/pms5003readings/#{pms5003_reading}", pms5003_reading: @invalid_attrs)
+
       assert json_response(conn, 422)["errors"] != %{}
     end
   end

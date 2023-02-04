@@ -1,8 +1,19 @@
 defmodule ByteAirWeb.DashboardLive do
+  alias Phoenix.PubSub
+  alias ByteAir.SensorBoundary
   use ByteAirWeb, :live_view
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    if connected?(socket) do
+      PubSub.subscribe(ByteAir.PubSub, "bme688_topic")
+      PubSub.subscribe(ByteAir.PubSub, "pms5003_topic")
+    end
+
+    {:ok,
+     assign(socket,
+       bme688readings: SensorBoundary.list_bme688readings(),
+       pms5003readings: SensorBoundary.list_pms5003readings()
+     )}
   end
 
   def render(assigns) do
@@ -44,15 +55,15 @@ defmodule ByteAirWeb.DashboardLive do
       show_y_axis: true
     }
 
-      data
-      |> Contex.Dataset.new(["Timey", "Temp?", "E-Level?"])
-      |> Contex.Plot.new(Contex.LinePlot, 800, 400,
-        y_label: "champ",
-        title: "poggers",
-        x_label: "Timey",
-        mapping: %{x_col: "Timey", y_cols: ["Temp?", "E-Level?"]},
-        legend_setting: :legend_right
-      )
-      |> Contex.Plot.to_svg()
+    data
+    |> Contex.Dataset.new(["Timey", "Temp?", "E-Level?"])
+    |> Contex.Plot.new(Contex.LinePlot, 800, 400,
+      y_label: "champ",
+      title: "poggers",
+      x_label: "Timey",
+      mapping: %{x_col: "Timey", y_cols: ["Temp?", "E-Level?"]},
+      legend_setting: :legend_right
+    )
+    |> Contex.Plot.to_svg()
   end
 end

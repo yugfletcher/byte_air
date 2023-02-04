@@ -12,7 +12,8 @@ defmodule ByteAirWeb.BME688ReadingController do
   end
 
   def create(conn, %{"bme688_reading" => bme688_reading_params}) do
-    with {:ok, %BME688Reading{} = bme688_reading} <- SensorBoundary.create_bme688_reading(bme688_reading_params) do
+    with {:ok, %BME688Reading{} = bme688_reading} <-
+           SensorBoundary.create_bme688_reading(bme688_reading_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/bme688readings/#{bme688_reading}")
@@ -28,7 +29,8 @@ defmodule ByteAirWeb.BME688ReadingController do
   def update(conn, %{"id" => id, "bme688_reading" => bme688_reading_params}) do
     bme688_reading = SensorBoundary.get_bme688_reading!(id)
 
-    with {:ok, %BME688Reading{} = bme688_reading} <- SensorBoundary.update_bme688_reading(bme688_reading, bme688_reading_params) do
+    with {:ok, %BME688Reading{} = bme688_reading} <-
+           SensorBoundary.update_bme688_reading(bme688_reading, bme688_reading_params) do
       render(conn, :show, bme688_reading: bme688_reading)
     end
   end

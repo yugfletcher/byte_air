@@ -28,7 +28,7 @@ defmodule ByteAirWeb.DashboardLive do
         <div>
           <%= bme688_gas(@bme688readings) %>
           <h1>
-            The stat above is a reading for everything tiny in the air, from unhealthy volitile organic compounds (VOCs) to innocuous carbon monoxide & hydrogen in parts per billion.
+            The stat above is a measurement for everything tiny in the air, from unhealthy volitile organic compounds (VOCs) to innocuous carbon monoxide & hydrogen in parts per billion.
           </h1>
         </div>
         <%= make_pms5003_line_chart(@pms5003readings) %>

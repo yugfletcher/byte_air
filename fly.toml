@@ -8,6 +8,10 @@ processes = []
 # [deploy]
   # release_command = "/app/bin/migrate"
 
+[mounts]
+  source = "byte_air_data"
+  destination = "/data"
+
 [env]
   PHX_HOST = "byte-air.fly.dev"
   DATABASE_PATH = "/data/byte_air_data/byte_air_prod.db"

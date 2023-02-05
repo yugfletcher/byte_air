@@ -20,7 +20,8 @@ defmodule ByteAirWeb.Router do
   scope "/", ByteAirWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    # get "/", PageController, :home
+    live "/", DashboardLive
   end
 
   # Other scopes may use custom stacks.
@@ -63,8 +64,6 @@ defmodule ByteAirWeb.Router do
       on_mount: [{ByteAirWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
-
-      live "/dashboard", DashboardLive
     end
   end
 

@@ -12,25 +12,25 @@
     </script>
   </head>
   <body class="bg-white antialiased">
-    <ul>
+    <ul class="flex h-14 p-8 justify-left items-center gap-4 bg-black-olive">
+      <li class="flex-1 hover:text-yellow-400 text-white">
+        Byte Air!
+      </li>
       <%= if @current_user do %>
-        <li>
+        <li class="hover:text-yellow-400 text-white">
           <%= @current_user.email %>
         </li>
-        <li>
-          <.link href={~p"/dashboard"}>Dashboard</.link>
-        </li>
-        <li>
+        <li class="hover:text-yellow-400 text-white">
           <.link href={~p"/users/settings"}>Settings</.link>
         </li>
-        <li>
+        <li class="hover:text-yellow-400 text-white">
           <.link href={~p"/users/log_out"} method="delete">Log out</.link>
         </li>
       <% else %>
-        <li>
+        <li class="hover:text-yellow-400 text-white">
           <.link href={~p"/users/register"}>Register</.link>
         </li>
-        <li>
+        <li class="hover:text-yellow-400 text-white">
           <.link href={~p"/users/log_in"}>Log in</.link>
         </li>
       <% end %>

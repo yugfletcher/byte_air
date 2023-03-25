@@ -7,6 +7,7 @@ defmodule ByteAir.Application do
 
   @impl true
   def start(_type, _args) do
+    #ByteAir.Release.create()
     ByteAir.Release.migrate()
 
     children = [

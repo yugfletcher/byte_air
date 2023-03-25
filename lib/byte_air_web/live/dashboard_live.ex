@@ -23,15 +23,21 @@ defmodule ByteAirWeb.DashboardLive do
         Byte Air !
       </h1>
       <div class="gap-4 md:flex flex-col lg:grid grid-cols-2 grid-rows-2 px-4">
-        <%= bme688_temp_humidity(@bme688readings) %>
-        <%= bme688_pressure(@bme688readings) %>
-        <div>
-          <%= bme688_gas(@bme688readings) %>
+        <%= if length(@bme688readings) > 0 && length(@pms5003readings) > 0 do %>
+          <%= bme688_temp_humidity(@bme688readings) %>
+          <%= bme688_pressure(@bme688readings) %>
+          <div>
+            <%= bme688_gas(@bme688readings) %>
+            <h1>
+              The stat above is a measurement for everything tiny in the air, from unhealthy volitile organic compounds (VOCs) to innocuous carbon monoxide & hydrogen in parts per billion.
+            </h1>
+          </div>
+          <%= make_pms5003_line_chart(@pms5003readings) %>
+        <% else %>
           <h1>
-            The stat above is a measurement for everything tiny in the air, from unhealthy volitile organic compounds (VOCs) to innocuous carbon monoxide & hydrogen in parts per billion.
+            No data!
           </h1>
-        </div>
-        <%= make_pms5003_line_chart(@pms5003readings) %>
+        <% end %>
       </div>
     </div>
     <div class="bg-opal flex flex-col">
